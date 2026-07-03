@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest'
 import { loadContent, hasContent } from './contentRegistry'
 import type { Enemy } from '../types/combat'
 import type { Region } from '../types/region'
+import type { NPC } from '../types/npc'
+import type { Dialogue } from '../types/dialogue'
 
 describe('contentRegistry', () => {
   it('loads seeded content by id', () => {
@@ -10,9 +12,19 @@ describe('contentRegistry', () => {
     expect(enemy.region).toBe('iron_mountains')
   })
 
-  it('loads the Ash Hollow region', () => {
+  it('loads the Ash Hollow region and its NPC placements', () => {
     const region = loadContent<Region>('ash_hollow')
     expect(region.displayName).toBe('Ash Hollow')
+    expect(region.npcs).toEqual([{ npcId: 'npc_elias_rowan', tileX: 9, tileY: 3 }])
+  })
+
+  it('loads Elias Rowan and his greeting dialogue', () => {
+    const npc = loadContent<NPC>('npc_elias_rowan')
+    expect(npc.displayName).toBe('Elias Rowan')
+
+    const dialogue = loadContent<Dialogue>(npc.dialogueId)
+    expect(dialogue.speaker).toBe('Elias Rowan')
+    expect(dialogue.lines.length).toBeGreaterThan(0)
   })
 
   it('reports whether an id exists', () => {

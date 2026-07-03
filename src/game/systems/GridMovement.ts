@@ -1,5 +1,10 @@
 import Phaser from 'phaser'
 
+export interface TilePosition {
+  x: number
+  y: number
+}
+
 export interface GridMovementConfig {
   scene: Phaser.Scene
   tileSize: number
@@ -9,6 +14,7 @@ export interface GridMovementConfig {
   originY: number
   startTileX: number
   startTileY: number
+  blockedTiles?: TilePosition[]
 }
 
 const MOVE_DURATION_MS = 150
@@ -30,6 +36,7 @@ export class GridMovementController {
   private readonly originX: number
   private readonly originY: number
   private readonly sprite: Phaser.GameObjects.Rectangle
+  private readonly blockedTiles: TilePosition[]
   private tileX: number
   private tileY: number
   private isMoving = false
@@ -43,6 +50,7 @@ export class GridMovementController {
     this.originY = config.originY
     this.tileX = config.startTileX
     this.tileY = config.startTileY
+    this.blockedTiles = config.blockedTiles ?? []
 
     const keyboard = this.scene.input.keyboard
     if (!keyboard) {
@@ -81,12 +89,19 @@ export class GridMovementController {
     bind(wasd.down, 0, 1)
   }
 
+  getTilePosition(): TilePosition {
+    return { x: this.tileX, y: this.tileY }
+  }
+
   private tryMove(dx: number, dy: number): void {
     if (this.isMoving) return
 
     const nextTileX = this.tileX + dx
     const nextTileY = this.tileY + dy
     if (nextTileX < 0 || nextTileX >= this.mapWidth || nextTileY < 0 || nextTileY >= this.mapHeight) {
+      return
+    }
+    if (this.blockedTiles.some((tile) => tile.x === nextTileX && tile.y === nextTileY)) {
       return
     }
 

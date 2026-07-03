@@ -6,8 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 *Forgotten Wilds* (Project Mytherra) — a browser-based, data-driven, shared-world JRPG
 built by Lantern Forge Studios. Login (Firebase Auth) gates entry; once signed in, the
-player boots into Ash Hollow via a BootScene → PreloadScene → TownScene chain. Still
-no combat, no quests, no multiplayer, no final art, no Firestore-backed save. See
+player boots into Ash Hollow via a BootScene → PreloadScene → TownScene chain, can
+move tile-by-tile, and can walk up to Elias Rowan and press Space to talk. Still no
+combat, no quests, no multiplayer, no final art, no Firestore-backed save. See
 `docs/09_Claude_Code_Playbook.md` for how this project is meant to be built (one
 bounded task at a time) and `docs/11_Production_Roadmap.md` for what's next.
 
@@ -67,13 +68,26 @@ back from `src/content/regions/`, with no idea what "Ash Hollow" actually is.
 `#app` containers. `src/main.ts` calls `onAuthStateChanged` and only constructs the
 `Phaser.Game` the first time a user is present — logged out, `src/auth/AuthScreen.ts`
 renders a plain DOM login form (email/password + Google) into `#auth` instead. Signing
-out hides `#app` again but does not destroy the running `Phaser.Game` instance.
+out hides `#app` again but does not destroy the running `Phaser.Game` instance. This
+was a deliberate choice over a Phaser-rendered title/login scene — real DOM inputs
+handle password fields, autofill, and the Google popup far better than anything
+hand-rolled inside a canvas.
+
+**Movement and NPC interaction** (`src/game/systems/GridMovement.ts`,
+`NpcInteraction.ts`) are event-driven, not polled in a scene `update()` loop — Phaser
+resets a `Key`'s `_justDown` flag on the keyup event itself, so polling `JustDown()`
+can silently miss a press when keydown+keyup land in the same animation frame
+(bit us once already; caught by an end-to-end browser check, not the type checker or
+unit tests). Bind to the key's `'down'` event instead. `GridMovementController` also
+takes `blockedTiles` so NPC placements block movement — `findAdjacentNpc` in
+`NpcInteraction.ts` is a pure function (unit tested) that scenes use to check for an
+adjacent NPC before showing `src/game/ui/DialogueBox.ts`.
 
 Type definitions in `src/types/` (`player.ts`, `combat.ts`, `quest.ts`, `item.ts`,
-`npc.ts`, `resonance.ts`, `journal.ts`) are the shape contracts content JSON and
-engine code both agree to — `combat.ts` covers both `Enemy` and `BattleSession`
-rather than getting its own `enemy.ts`/`battle.ts`, matching the file list in the
-architecture spec exactly.
+`npc.ts`, `resonance.ts`, `journal.ts`, `region.ts`, `dialogue.ts`) are the shape
+contracts content JSON and engine code both agree to — `combat.ts` covers both
+`Enemy` and `BattleSession` rather than getting its own `enemy.ts`/`battle.ts`,
+matching the file list in the architecture spec exactly.
 
 `src/firebase/app.ts` does the one `initializeApp` call (idempotent via
 `getApps()`/`getApp()`); `auth.ts`, `firestore.ts`, and `functions.ts` each just

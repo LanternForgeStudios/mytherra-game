@@ -4,5 +4,6 @@
   "description": "A quiet mountain town where every Lantern Keeper's journey begins.",
   "tileSize": 32,
   "mapWidth": 14,
-  "mapHeight": 10
+  "mapHeight": 10,
+  "npcs": [{ "npcId": "npc_elias_rowan", "tileX": 9, "tileY": 3 }]
 }

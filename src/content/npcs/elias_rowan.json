@@ -1,0 +1,8 @@
+{
+  "id": "npc_elias_rowan",
+  "displayName": "Elias Rowan",
+  "region": "ash_hollow",
+  "role": "Village Elder",
+  "dialogueId": "dialogue_elias_rowan_greeting",
+  "questIds": []
+}

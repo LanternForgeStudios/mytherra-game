@@ -1,3 +1,9 @@
+export interface RegionNpcPlacement {
+  npcId: string
+  tileX: number
+  tileY: number
+}
+
 export interface Region {
   id: string
   displayName: string
@@ -5,4 +11,5 @@ export interface Region {
   tileSize: number
   mapWidth: number
   mapHeight: number
+  npcs: RegionNpcPlacement[]
 }

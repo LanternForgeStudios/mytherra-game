@@ -83,9 +83,12 @@ This repo has project skills under `.claude/skills/` for common workflows:
 ## Current status
 
 Login (email/password + Google, via Firebase Auth) gates entry into the game; once
-signed in, the player boots straight into Ash Hollow. Still no combat, no quests, no
-multiplayer, no final art, and no Firestore-backed player save yet — those are the
-next layers. See `docs/11_Production_Roadmap.md` for the broader roadmap.
+signed in, the player boots straight into Ash Hollow and can move around with
+arrow keys/WASD (tile-locked, one tile per press). Walking next to Elias Rowan and
+pressing Space opens a short dialogue box; pressing Space again closes it. Still no
+combat, no quests, no multiplayer, no final art, and no Firestore-backed player save
+yet — those are the next layers. See `docs/11_Production_Roadmap.md` for the broader
+roadmap.
 
 **Google sign-in on GitHub Pages:** if "Sign in with Google" fails on the live site
 with an unauthorized-domain error, add `lanternforgestudios.github.io` under
