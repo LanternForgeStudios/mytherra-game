@@ -5,12 +5,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this is
 
 *Forgotten Wilds* (Project Mytherra) — a browser-based, data-driven, shared-world JRPG
-built by Lantern Forge Studios. This repo (`mytherra-game`) is currently in the
-**initial skeleton phase**: BootScene → PreloadScene → TownScene boot chain, typed
-content stubs, a content registry, and Firebase client init — no combat, no quests, no
-multiplayer, no final art. See `docs/09_Claude_Code_Playbook.md` for how this project
-is meant to be built (one bounded task at a time) and `docs/11_Production_Roadmap.md`
-for what's next.
+built by Lantern Forge Studios. Login (Firebase Auth) gates entry; once signed in, the
+player boots into Ash Hollow via a BootScene → PreloadScene → TownScene chain. Still
+no combat, no quests, no multiplayer, no final art, no Firestore-backed save. See
+`docs/09_Claude_Code_Playbook.md` for how this project is meant to be built (one
+bounded task at a time) and `docs/11_Production_Roadmap.md` for what's next.
 
 ## Commands
 
@@ -60,8 +59,15 @@ The whole codebase follows one rule from `docs/08_Software_Architecture_Specific
 (`import.meta.glob`) and indexes each by its `id` field. Scene/system code calls
 `loadContent<T>('some_id')` and never imports a content JSON file directly — that's
 what keeps lore out of engine code. `src/game/scenes/TownScene.ts` is the reference
-example of this pattern (loads `echo_raven_001` from
-`src/content/enemies/echo_raven_001.json` by ID).
+example of this pattern: it takes an optional `regionId` (defaults to `ash_hollow`)
+via Phaser's scene `init(data)` and renders whatever `displayName`/`description` comes
+back from `src/content/regions/`, with no idea what "Ash Hollow" actually is.
+
+**Auth gates the game, not a Phaser scene.** `index.html` has separate `#auth` and
+`#app` containers. `src/main.ts` calls `onAuthStateChanged` and only constructs the
+`Phaser.Game` the first time a user is present — logged out, `src/auth/AuthScreen.ts`
+renders a plain DOM login form (email/password + Google) into `#auth` instead. Signing
+out hides `#app` again but does not destroy the running `Phaser.Game` instance.
 
 Type definitions in `src/types/` (`player.ts`, `combat.ts`, `quest.ts`, `item.ts`,
 `npc.ts`, `resonance.ts`, `journal.ts`) are the shape contracts content JSON and

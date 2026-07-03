@@ -15,6 +15,11 @@ by content ID through `src/data/contentRegistry.ts` from JSON files under
 `src/content/`. See `docs/08_Software_Architecture_Specification.md` for the full
 spec and `docs/09_Claude_Code_Playbook.md` for how this project is built task by task.
 
+Entry is gated by Firebase Auth: `index.html` has separate `#auth` (login form) and
+`#app` (Phaser canvas) containers, and `src/main.ts` uses `onAuthStateChanged` to
+show one or the other — the Phaser game isn't created until a user is signed in. The
+login UI itself (`src/auth/AuthScreen.ts`) is plain DOM, not a Phaser scene.
+
 ## Stack
 
 - Vite + TypeScript
@@ -75,8 +80,14 @@ This repo has project skills under `.claude/skills/` for common workflows:
 - `/run_local start` / `/run_local stop` — run the dev server in the background for
   manual browser testing
 
-## Current status: skeleton only
+## Current status
 
-Per the Claude Code Playbook, this is the initial skeleton — no combat, no quests,
-no multiplayer, no final art. See `docs/11_Production_Roadmap.md` for what comes
-next.
+Login (email/password + Google, via Firebase Auth) gates entry into the game; once
+signed in, the player boots straight into Ash Hollow. Still no combat, no quests, no
+multiplayer, no final art, and no Firestore-backed player save yet — those are the
+next layers. See `docs/11_Production_Roadmap.md` for the broader roadmap.
+
+**Google sign-in on GitHub Pages:** if "Sign in with Google" fails on the live site
+with an unauthorized-domain error, add `lanternforgestudios.github.io` under
+Firebase Console → Authentication → Settings → Authorized domains (`localhost` is
+authorized by default, the Pages domain isn't automatically).
