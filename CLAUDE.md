@@ -7,10 +7,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 *Forgotten Wilds* (Project Mytherra) — a browser-based, data-driven, shared-world JRPG
 built by Lantern Forge Studios. Login (Firebase Auth) gates entry; once signed in, the
 player boots into Ash Hollow via a BootScene → PreloadScene → TownScene chain, can
-move tile-by-tile, and can walk up to Elias Rowan and press Space to talk. Still no
-combat, no quests, no multiplayer, no final art, no Firestore-backed save. See
-`docs/09_Claude_Code_Playbook.md` for how this project is meant to be built (one
-bounded task at a time) and `docs/11_Production_Roadmap.md` for what's next.
+move tile-by-tile, and can walk up to Elias Rowan and press Space to talk. Pressing
+`B` transitions to a BattleScene scaffold (enemy loaded by ID, ESC returns to town) —
+no actual combat logic yet. Still no quests, no multiplayer, no final art, no
+Firestore-backed save. See `docs/09_Claude_Code_Playbook.md` for how this project is
+meant to be built (one bounded task at a time) and `docs/11_Production_Roadmap.md`
+for what's next.
 
 ## Commands
 

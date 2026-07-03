@@ -6,6 +6,7 @@ import { mountAuthScreen, mountAuthBar, clearAuthBar } from './auth/AuthScreen'
 import { BootScene } from './game/scenes/BootScene'
 import { PreloadScene } from './game/scenes/PreloadScene'
 import { TownScene } from './game/scenes/TownScene'
+import { BattleScene } from './game/scenes/BattleScene'
 
 function requireElement(id: string): HTMLElement {
   const el = document.getElementById(id)
@@ -27,7 +28,7 @@ function startGame(): void {
     width: 800,
     height: 600,
     backgroundColor: '#1a1f1a',
-    scene: [BootScene, PreloadScene, TownScene],
+    scene: [BootScene, PreloadScene, TownScene, BattleScene],
   }
   game = new Phaser.Game(config)
 }

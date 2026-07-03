@@ -85,9 +85,12 @@ This repo has project skills under `.claude/skills/` for common workflows:
 Login (email/password + Google, via Firebase Auth) gates entry into the game; once
 signed in, the player boots straight into Ash Hollow and can move around with
 arrow keys/WASD (tile-locked, one tile per press). Walking next to Elias Rowan and
-pressing Space opens a short dialogue box; pressing Space again closes it. Still no
-combat, no quests, no multiplayer, no final art, and no Firestore-backed player save
-yet — those are the next layers. See `docs/11_Production_Roadmap.md` for the broader
+pressing Space opens a short dialogue box; pressing Space again closes it. Pressing
+`B` in town jumps to a BattleScene scaffold against the starter enemy (test-only
+trigger, not a real encounter system) — it shows the enemy and lets you flee back to
+town with ESC, but there's no actual battle logic yet (no HP, attack, or win
+condition — that's next). Still no quests, no multiplayer, no final art, and no
+Firestore-backed player save. See `docs/11_Production_Roadmap.md` for the broader
 roadmap.
 
 **Google sign-in on GitHub Pages:** if "Sign in with Google" fails on the live site

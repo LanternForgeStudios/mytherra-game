@@ -16,6 +16,7 @@ const FLOOR_TILE_COLOR = 0x35422f
 const NPC_COLOR = 0xc9a15a
 const TILE_GAP = 1
 const MAP_TOP_MARGIN = 90
+const TEST_BATTLE_ENEMY_ID = 'echo_raven_001'
 
 export class TownScene extends Phaser.Scene {
   private regionId = 'ash_hollow'
@@ -94,6 +95,18 @@ export class TownScene extends Phaser.Scene {
       const npc = loadContent<NPC>(nearby.npcId)
       const dialogue = loadContent<Dialogue>(npc.dialogueId)
       dialogueBox.show(dialogue.speaker, dialogue.lines[0] ?? '')
+    })
+
+    // Test-only trigger for the Town -> Battle transition. Not a real
+    // encounter system (no random encounters, no encounter zones yet) —
+    // just proves the scene handoff and enemy-by-ID loading work.
+    keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.B).on('down', () => {
+      this.scene.start('battle', { enemyId: TEST_BATTLE_ENEMY_ID })
+    })
+
+    this.add.text(16, this.scale.height - 24, 'Space: talk   B: test battle', {
+      fontSize: '12px',
+      color: '#5a6b5a',
     })
   }
 
