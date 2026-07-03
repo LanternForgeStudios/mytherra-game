@@ -24,19 +24,14 @@ export interface Enemy {
   journalEntries: string[]
 }
 
-export interface BattleParticipant {
-  id: string
-  displayName: string
-  stats: CreatureStats
-}
+export type BattleStatus = 'active' | 'won' | 'lost'
 
-export type BattleStatus = 'pending' | 'active' | 'won' | 'lost' | 'fled'
-
-export interface BattleSession {
-  id: string
-  participants: BattleParticipant[]
-  turnOrder: string[]
-  currentTurnIndex: number
-  status: BattleStatus
+export interface BattleState {
+  enemyId: string
+  playerHp: number
+  playerMaxHp: number
+  enemyHp: number
+  enemyMaxHp: number
   log: string[]
+  status: BattleStatus
 }

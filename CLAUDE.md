@@ -8,11 +8,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 built by Lantern Forge Studios. Login (Firebase Auth) gates entry; once signed in, the
 player boots into Ash Hollow via a BootScene → PreloadScene → TownScene chain, can
 move tile-by-tile, and can walk up to Elias Rowan and press Space to talk. Pressing
-`B` transitions to a BattleScene scaffold (enemy loaded by ID, ESC returns to town) —
-no actual combat logic yet. Still no quests, no multiplayer, no final art, no
-Firestore-backed save. See `docs/09_Claude_Code_Playbook.md` for how this project is
-meant to be built (one bounded task at a time) and `docs/11_Production_Roadmap.md`
-for what's next.
+`B` (test-only trigger, not a real encounter system yet) starts a basic turn-based
+battle against the starter enemy — Attack/Observe/win-loss, no quests, no
+multiplayer, no final art, no Firestore-backed save (battle HP starts from a fixed
+local baseline, not a real player profile). See `docs/09_Claude_Code_Playbook.md` for
+how this project is meant to be built (one bounded task at a time) and
+`docs/11_Production_Roadmap.md` for what's next.
 
 ## Commands
 
@@ -88,8 +89,17 @@ adjacent NPC before showing `src/game/ui/DialogueBox.ts`.
 Type definitions in `src/types/` (`player.ts`, `combat.ts`, `quest.ts`, `item.ts`,
 `npc.ts`, `resonance.ts`, `journal.ts`, `region.ts`, `dialogue.ts`) are the shape
 contracts content JSON and engine code both agree to — `combat.ts` covers both
-`Enemy` and `BattleSession` rather than getting its own `enemy.ts`/`battle.ts`,
+`Enemy` and `BattleState` rather than getting its own `enemy.ts`/`battle.ts`,
 matching the file list in the architecture spec exactly.
+
+**Battle logic is pure and separate from BattleScene.**
+`src/game/systems/BattleLogic.ts` (`createBattleState`/`applyAttack`/`applyObserve`)
+takes and returns a `BattleState` with no Phaser dependency, and its damage rolls take
+an injectable `RandomSource` so win/loss branches are actually testable
+(`BattleLogic.test.ts` uses `() => 0` / `() => 0.999` to hit exact values instead of
+asserting on ranges). `BattleScene` only holds the current `BattleState` and re-renders text objects from it
+after each command — same split as `findAdjacentNpc` (pure) vs. the Space-key
+handling that lives directly in `TownScene`.
 
 `src/firebase/app.ts` does the one `initializeApp` call (idempotent via
 `getApps()`/`getApp()`); `auth.ts`, `firestore.ts`, and `functions.ts` each just

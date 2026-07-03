@@ -86,12 +86,13 @@ Login (email/password + Google, via Firebase Auth) gates entry into the game; on
 signed in, the player boots straight into Ash Hollow and can move around with
 arrow keys/WASD (tile-locked, one tile per press). Walking next to Elias Rowan and
 pressing Space opens a short dialogue box; pressing Space again closes it. Pressing
-`B` in town jumps to a BattleScene scaffold against the starter enemy (test-only
-trigger, not a real encounter system) — it shows the enemy and lets you flee back to
-town with ESC, but there's no actual battle logic yet (no HP, attack, or win
-condition — that's next). Still no quests, no multiplayer, no final art, and no
-Firestore-backed player save. See `docs/11_Production_Roadmap.md` for the broader
-roadmap.
+`B` in town (test-only trigger, not a real encounter system yet) starts a battle
+against the starter enemy: `A` attacks, `O` observes (reveals a weakness, still costs
+a turn), `ESC` flees back to town any time. Battle ends in victory or defeat with a
+log of what happened. Still no quests, no multiplayer, no final art, and no
+Firestore-backed player save (battle always starts from a fixed local HP baseline,
+not a real player profile) — those are next. See `docs/11_Production_Roadmap.md` for
+the broader roadmap.
 
 **Google sign-in on GitHub Pages:** if "Sign in with Google" fails on the live site
 with an unauthorized-domain error, add `lanternforgestudios.github.io` under
