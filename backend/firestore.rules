@@ -1,0 +1,13 @@
+rules_version = '2';
+
+// Default-deny placeholder. No collections are defined yet — real rules
+// (players can read/write only their own profile, inventory, quest progress,
+// etc.) get added once the Firestore schema exists. Until then, nothing is
+// readable or writable from the client.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

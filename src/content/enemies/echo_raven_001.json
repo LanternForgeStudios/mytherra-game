@@ -1,0 +1,23 @@
+{
+  "id": "echo_raven_001",
+  "displayName": "Frightened Raven Echo",
+  "localNames": ["Blackwing", "Ash Hollow Raven"],
+  "lanternName": "Minor Moon Echo",
+  "ancientName": null,
+  "region": "iron_mountains",
+  "level": 1,
+  "resonance": ["Moon"],
+  "stats": {
+    "hp": 30,
+    "strength": 4,
+    "resolve": 2,
+    "insight": 3,
+    "agility": 8,
+    "presence": 2
+  },
+  "weaknesses": ["Dawn"],
+  "resistances": ["Moon"],
+  "actions": ["peck", "shadow_flutter"],
+  "lootTable": ["feather_dark", "spirit_essence_small"],
+  "journalEntries": ["journal_echo_raven_001"]
+}
